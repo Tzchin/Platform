@@ -10,6 +10,9 @@ void ofApp::setup(){
 	pCo.x = ofGetWidth() / 2;
 	pCo.y = ofGetHeight() / 2;
 	objs.push_back(new Player(pCo, 20, 20, 5));
+    screenOffset.x = 0;
+    screenOffset.y = 0;
+    player = (Player*)objs[0];
 	
 }
 
@@ -20,12 +23,24 @@ void ofApp::update(){
 	{
 		objs[i]->updatePos(walls);
 	}
-
+    
+    screenOffset.x = ofGetWidth()/2 - player->getPos().x;
+    if(player->getPos().y > ofGetHeight()/2)
+    {
+        screenOffset.y = 0;
+    }
+    else
+    {
+        screenOffset.y = ofGetHeight()/2 - player->getPos().y;
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 	
+    ofPushMatrix();
+    ofTranslate(screenOffset.x, screenOffset.y);
+    
 	ofPushMatrix();
 	ofPushStyle();
 	ofSetColor(255, 162, 56);
@@ -49,10 +64,14 @@ void ofApp::draw(){
 	ofPopStyle();
 	ofPopMatrix();
 
-	ofPushStyle();
-	ofSetColor(255, 255, 255);
-	ofDrawBitmapString(objs[0]->getPos().x, 10, 20);
-	ofPopStyle();
+    
+    ofPopMatrix();
+    
+    ofPushStyle();
+    ofSetColor(255, 255, 255);
+    ofDrawBitmapString(player->getPos().x, 10, 20);
+     ofDrawBitmapString(player->getPos().y, 10, 40);
+    ofPopStyle();
 }
 
 //--------------------------------------------------------------
@@ -60,15 +79,15 @@ void ofApp::keyPressed(int key){
 	
 	if (key == 'a')
 	{
-		objs[0]->moveLeft();
+		player->moveLeft();
 	}
 	if (key == 'd')
 	{
-		objs[0]->moveRight();
+		player->moveRight();
 	}
 	if (key == 'w')
 	{
-		objs[0]->jump();
+		player->jump();
 	}
 }
 
@@ -76,11 +95,11 @@ void ofApp::keyPressed(int key){
 void ofApp::keyReleased(int key){
 	if (key == 'a')
 	{
-		objs[0]->stopLeft();
+		player->stopLeft();
 	}
 	if (key == 'd')
 	{
-		objs[0]->stopRight();
+		player->stopRight();
 	}
 }
 
@@ -97,16 +116,16 @@ void ofApp::mouseDragged(int x, int y, int button){
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
 	//stores mouse pos
-	mouseCo.x = x;
-	mouseCo.y = y;
+	mouseCo.x = x - screenOffset.x;
+	mouseCo.y = y - screenOffset.y;
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
 
 	Vec co;
-	co.x = x;
-	co.y = y;
+	co.x = x - screenOffset.x;
+	co.y = y - screenOffset.y;
 	walls.push_back(new StaticRect(mouseCo, co));
 }
 

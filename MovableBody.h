@@ -1,5 +1,5 @@
 #pragma once
-//#include "ofApp.h"
+#include "ofMain.h"
 #include "Vec.h"
 #include "StaticRect.h"
 //#include "ofApp.h"
@@ -38,7 +38,9 @@ protected:
 	int width;
 	int height;
 	int speed;
-	void translate(Vec * co, int x, int y);	//Add Checks Later?
+    ofVec2f acceleration;
+    ofVec2f velocity;
+	void translate(Vec * co, float x, float y);	//Add Checks Later?
 	bool moving;
 	bool movingLeft;
 	bool movingRight;

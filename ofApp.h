@@ -35,4 +35,6 @@ class ofApp : public ofBaseApp{
 		vector <MovableBody *> objs;
 		Vec mouseCo;
 		bool checkCollision(MovableBody * obj, StaticRect * wall);
+        Vec screenOffset;
+        Player * player;
 };

@@ -124,8 +124,6 @@ void MovableBody::updatePos(vector <StaticRect *> walls) //Also does collision d
 	Vec d;
 	d.x = 0;
 	d.y = 0;
-	static float yVelocity = 0;
-	static int time = 0;
 	if (movingLeft)
 	{
 		d.x += -speed;
@@ -134,31 +132,13 @@ void MovableBody::updatePos(vector <StaticRect *> walls) //Also does collision d
 	{
 		d.x += speed;
 	}
-	if (!inJump)
-	{
-		yVelocity = ceilf((1.0 / 8.0) * (time + 1)); //Hard coded constants
-		d.y = yVelocity;
-		time++;
-/*		if (d.y > 5)
-		{
-			d.y = 5;
-			yVelocity = 5;
-		}*/
-	}
-	else //Calculates Jump
-	{
-		if (time <= 60) //Hard coded constants
-		{
-			yVelocity = float((1.0/8.0) * (time - 60));
-			d.y = yVelocity;
-			time++;
-		}
-		else
-		{
-			inJump = false;
-			time = 0;
-		}
-	}
+    
+    //Calculates Y Displacement
+    acceleration.y = 0.125;
+    velocity += acceleration;
+    d.y += velocity.y;
+    
+    
 
 	if (d.x == 0 && d.y == 0)
 	{
@@ -201,16 +181,14 @@ void MovableBody::updatePos(vector <StaticRect *> walls) //Also does collision d
 				if (d.y < 0) //going up
 				{
 					d.y = walls[i]->getBR().y - getTL(position).y;
-					yVelocity = 0;
+					velocity.y = 0;
 					inJump = false;
-					time = 0;
 					
 				}
 				else if (d.y > 0) //going down
 				{
 					d.y = walls[i]->getTL().y - getBR(position).y;
-					yVelocity = 0;
-					time = 0;
+                    velocity.y = 0;
 					canJump = true;
 				}
 			}
@@ -251,7 +229,7 @@ bool MovableBody::checkCollision(StaticRect * wall, Vec pos)
 		&& (this->getTL(pos).y < wall->getBR().y && this->getBR(pos).y > wall->getTL().y)); //Checks y-axis alignment
 }
 
-void MovableBody::translate(Vec * co, int x, int y)
+void MovableBody::translate(Vec * co, float x, float y)
 {
 
 	co->x += x;
@@ -278,7 +256,10 @@ void MovableBody::stopLeft()
 void MovableBody::jump()
 {
 	if(canJump)
+    {
 		inJump = true;
+        velocity.y = -7.5f;
+    }
 }
 
 void MovableBody::moveRight()

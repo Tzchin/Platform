@@ -3,8 +3,8 @@
 using namespace std;
 struct Vec
 {
-	int x;
-	int y;
+	float x;
+	float y;
 };
 
 ostream& operator<<(ostream& os, Vec& co);
