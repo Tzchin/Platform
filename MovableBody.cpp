@@ -119,7 +119,7 @@ void MovableBody::updatePos() //No collision detection
 
 }
 
-void MovableBody::updatePos(vector <StaticRect *> walls) //Also does collision detection
+void MovableBody::updatePos(vector <StaticBody *> walls) //Also does collision detection
 {
 	Vec d;
 	d.x = 0;
@@ -154,7 +154,7 @@ void MovableBody::updatePos(vector <StaticRect *> walls) //Also does collision d
 		for (unsigned int i = 0; i < walls.size() && !xCollided; i++)
 		{
 
-			if (checkCollision(walls[i], newXPos))
+			if (walls[i]->checkCollision(this, newXPos))
 			{
 				xCollided = true;
 				if (d.x > 0) //Moving Right
@@ -175,7 +175,7 @@ void MovableBody::updatePos(vector <StaticRect *> walls) //Also does collision d
 		for (unsigned int i = 0; i < walls.size() && !yCollided; i++)
 		{
 
-			if (checkCollision(walls[i], newYPos))
+			if (walls[i]->checkCollision(this, newYPos))
 			{
 				yCollided = true;
 				if (d.y < 0) //going up
@@ -217,13 +217,13 @@ void MovableBody::updatePos(vector <StaticRect *> walls) //Also does collision d
 
 }
 
-bool MovableBody::checkCollision(StaticRect * wall)
+bool MovableBody::checkCollision(StaticBody * wall)
 {
 	return ((this->getTL().x < wall->getBR().x && this->getBR().x > wall->getTL().x) //Checks x-axis alignment
 		&& (this->getTL().y < wall->getBR().y && this->getBR().y > wall->getTL().y)); //Checks y-axis alignment
 }
 
-bool MovableBody::checkCollision(StaticRect * wall, Vec pos)
+bool MovableBody::checkCollision(StaticBody * wall, Vec pos)
 {
 	return ((this->getTL(pos).x < wall->getBR().x && this->getBR(pos).x > wall->getTL().x) //Checks x-axis alignment
 		&& (this->getTL(pos).y < wall->getBR().y && this->getBR(pos).y > wall->getTL().y)); //Checks y-axis alignment

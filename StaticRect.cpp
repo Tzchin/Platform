@@ -1,6 +1,6 @@
 #include "StaticRect.h"
 
-StaticRect::StaticRect(Vec _TL, Vec _BR)
+StaticRect::StaticRect(Vec _TL, Vec _BR) : StaticBody(0,0)
 {
 	TL = _TL;
 	BR = _BR;
@@ -15,7 +15,7 @@ StaticRect::StaticRect(Vec _TL, Vec _BR)
 	height = BL.y - TL.y;
 }
 
-StaticRect::StaticRect(Vec _TL, int _width, int _height) : width(_width), height(_height)
+StaticRect::StaticRect(Vec _TL, int _width, int _height) : StaticBody(_width, _height)
 {
 	TL = _TL;
 	BL.x = _TL.x;
@@ -26,14 +26,9 @@ StaticRect::StaticRect(Vec _TL, int _width, int _height) : width(_width), height
 	BR.y = _TL.y + height;
 }
 
-int StaticRect::getWidth()
+void StaticRect::draw()
 {
-	return width;
-}
-
-int StaticRect::getHeight()
-{
-	return height;
+	ofDrawRectangle(TL.x, TL.y, width, height);
 }
 
 Vec StaticRect::getTL()
@@ -44,4 +39,17 @@ Vec StaticRect::getTL()
 Vec StaticRect::getBR()
 {
 	return BR;
+}
+
+bool StaticRect::checkCollision(MovableBody * obj)
+{
+
+	return ((obj->getTL().x < this->getBR().x && obj->getBR().x > this->getTL().x) //Checks x-axis alignment
+		&& (obj->getTL().y < this->getBR().y && obj->getBR().y > this->getTL().y)); //Checks y-axis alignment
+}
+
+bool StaticRect::checkCollision(MovableBody * obj, Vec pos)
+{
+	return ((obj->getTL(pos).x < this->getBR().x && obj->getBR(pos).x > this->getTL().x) //Checks x-axis alignment
+		&& (obj->getTL(pos).y < this->getBR().y && obj->getBR(pos).y > this->getTL().y)); //Checks y-axis alignment
 }

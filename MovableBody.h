@@ -1,9 +1,12 @@
 #pragma once
 #include "ofMain.h"
 #include "Vec.h"
-#include "StaticRect.h"
+#include "StaticBody.h"
 //#include "ofApp.h"
 #include <vector>
+
+class StaticBody;
+class StaticRect;
 
 class MovableBody
 {
@@ -27,9 +30,9 @@ public:
 	void stopLeft();
 	void jump();
 	void updatePos();
-	void updatePos(vector<StaticRect*> walls);
-	bool checkCollision(StaticRect * wall);
-	bool checkCollision(StaticRect * wall, Vec pos);
+	void updatePos(vector<StaticBody*> walls);
+	bool checkCollision(StaticBody * wall);
+	bool checkCollision(StaticBody * wall, Vec pos);
 
 private:
 
@@ -38,8 +41,8 @@ protected:
 	int width;
 	int height;
 	int speed;
-    ofVec2f acceleration;
-    ofVec2f velocity;
+    ofPoint acceleration;
+    ofPoint velocity;
 	void translate(Vec * co, float x, float y);	//Add Checks Later?
 	bool moving;
 	bool movingLeft;

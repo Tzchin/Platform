@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "StaticRect.h"
+#include "StaticTriangle.h"
 #include "Vec.h"
 #include "MovableBody.h"
 #include "Player.h"
@@ -31,7 +32,7 @@ class ofApp : public ofBaseApp{
 //		vector <StaticRect *> getWalls();
 		
 	private:
-		vector <StaticRect *> walls;
+		vector <StaticBody *> walls;
 		vector <MovableBody *> objs;
 		Vec mouseCo;
 		bool checkCollision(MovableBody * obj, StaticRect * wall);

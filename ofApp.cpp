@@ -6,6 +6,10 @@ void ofApp::setup(){
 	co.x = 0;
 	co.y = ofGetHeight() - 100;
 	walls.push_back(new StaticRect(co, 1000, 100));
+	ofPoint co2;
+	co2.x = 0;
+	co2.y = ofGetHeight() - 150;
+	walls.push_back(new StaticTriangle(co2, 100, -100));
 	Vec pCo;
 	pCo.x = ofGetWidth() / 2;
 	pCo.y = ofGetHeight() / 2;
@@ -46,8 +50,7 @@ void ofApp::draw(){
 	ofSetColor(255, 162, 56);
 	for (int i = 0; i < walls.size(); i++) //Draws all walls
 	{
-		
-		ofDrawRectangle(walls[i]->getTL().x, walls[i]->getTL().y, walls[i]->getWidth(), walls[i]->getHeight());
+		walls[i]->draw();
 	}
 	ofPopStyle();
 	ofPopMatrix();
@@ -126,7 +129,18 @@ void ofApp::mouseReleased(int x, int y, int button){
 	Vec co;
 	co.x = x - screenOffset.x;
 	co.y = y - screenOffset.y;
-	walls.push_back(new StaticRect(mouseCo, co));
+
+	if(button == 0)
+		walls.push_back(new StaticRect(mouseCo, co));
+	else if (button == 2)
+	{
+		ofPoint pt;
+		pt.y = mouseCo.y;
+		pt.x = co.x;
+		int width = mouseCo.x - co.x;
+		int height = co.y - mouseCo.y;
+		walls.push_back(new StaticTriangle(pt, width, height));
+	}
 }
 
 //--------------------------------------------------------------
