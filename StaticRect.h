@@ -16,6 +16,7 @@ public:
 	Vec getBR();
 	bool checkCollision(MovableBody *obj);
 	bool checkCollision(MovableBody* obj, Vec pos);
+	bool handleCollision(MovableBody * obj, Vec pos, ofPoint adjust);
 
 private:
 	Vec TL;

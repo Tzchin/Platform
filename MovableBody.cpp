@@ -154,16 +154,21 @@ void MovableBody::updatePos(vector <StaticBody *> walls) //Also does collision d
 		for (unsigned int i = 0; i < walls.size() && !xCollided; i++)
 		{
 
-			if (walls[i]->checkCollision(this, newXPos))
+			while (walls[i]->checkCollision(this, newXPos))
 			{
 				xCollided = true;
 				if (d.x > 0) //Moving Right
 				{
-					d.x = walls[i]->getTL().x - getBR(position).x;
+					d.x -= 0.25;
+					newXPos.x -= 0.25;
+
+					//d.x = walls[i]->getTL().x - getBR(position).x;
 				} 
-				else if (d.x < 0) //Moving Left
+				else if (d.x <= 0) //Moving Left
 				{
-					d.x = walls[i]->getBR().x - getTL(position).x;
+					d.x += 0.25;
+					newXPos.x += 0.25;
+					//d.x = walls[i]->getBR().x - getTL(position).x;
 				}
 			}
 		}
@@ -175,38 +180,74 @@ void MovableBody::updatePos(vector <StaticBody *> walls) //Also does collision d
 		for (unsigned int i = 0; i < walls.size() && !yCollided; i++)
 		{
 
-			if (walls[i]->checkCollision(this, newYPos))
+			while (walls[i]->checkCollision(this, newYPos))
 			{
 				yCollided = true;
 				if (d.y < 0) //going up
 				{
-					d.y = walls[i]->getBR().y - getTL(position).y;
+					d.y += 0.125;
+					newYPos.y += 0.125;
+					//d.y = walls[i]->getBR().y - getTL(position).y;
 					velocity.y = 0;
 					inJump = false;
 					
 				}
-				else if (d.y > 0) //going down
+				else if (d.y >= 0) //going down
 				{
-					d.y = walls[i]->getTL().y - getBR(position).y;
+					d.y -= 0.125;
+					newYPos.y -= 0.125;
+					//d.y = walls[i]->getTL().y - getBR(position).y;
                     velocity.y = 0;
 					canJump = true;
 				}
 			}
 		}
-		collided = xCollided || yCollided;
-		if (!collided) //Checks both
-		{
+//		collided = xCollided || yCollided;
+//		if (!collided) //Checks both
+//		{
 			Vec newPos = position; 
 			translate(&newPos, d.x, d.y);
 			for (unsigned int i = 0; i < walls.size() && !collided; i++)
 			{
 
-				if (checkCollision(walls[i], newPos))
+				while (walls[i]->checkCollision(this, newPos))
 				{
 					collided = true;
+
+					if (d.y < 0) //going up
+					{
+						d.y += 0.125;
+						newPos.y += 0.125;
+						//d.y = walls[i]->getBR().y - getTL(position).y;
+						velocity.y = 0;
+						inJump = false;
+
+					}
+					else if (d.y >= 0) //going down
+					{
+						d.y -= 0.125;
+						newPos.y -= 0.125;
+						//d.y = walls[i]->getTL().y - getBR(position).y;
+						velocity.y = 0;
+						canJump = true;
+					}
+
+					if (d.x > 0) //Moving Right
+					{
+						d.x -= 0.25;
+						newXPos.x -= 0.25;
+
+						//d.x = walls[i]->getTL().x - getBR(position).x;
+					}
+					else if (d.x <= 0) //Moving Left
+					{
+						d.x += 0.25;
+						newXPos.x += 0.25;
+						//d.x = walls[i]->getBR().x - getTL(position).x;
+					}
 				}
 			}
-		}
+//		}
 		if (d.x != 0 || d.y != 0)
 		{
 			moving = true;

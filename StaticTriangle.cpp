@@ -23,10 +23,10 @@ bool StaticTriangle::checkCollision(MovableBody *obj, Vec pos)
 		|| (ofInsidePoly(obj->getBR(pos).x, obj->getBR(pos).y, poly))
 		|| (ofInsidePoly(obj->getBL(pos).x, obj->getBL(pos).y, poly))
 
-		|| (ofInRange(poly[1].x, obj->getTL(pos).x, obj->getBR(pos).x) //Checks if Corners of tri in rect
-			&& ofInRange(poly[1].y, obj->getTL(pos).y, obj->getBR(pos).y))
-		|| (ofInRange(poly[2].x, obj->getTL(pos).x, obj->getBR(pos).x)
-			&& ofInRange(poly[2].y, obj->getTL(pos).y, obj->getBR(pos).y))
+		|| ((obj->getTL(pos).x < poly[1].x &&  poly[1].x < obj->getBR(pos).x) //Checks if Corners of tri in rect
+			&& (obj->getTL(pos).y < poly[1].y &&  poly[1].y < obj->getBR(pos).y))
+		|| ((obj->getTL(pos).x < poly[2].x &&  poly[2].x < obj->getBR(pos).x) 
+			&& (obj->getTL(pos).y < poly[2].y &&  poly[2].y < obj->getBR(pos).y))
 		
 		
 			);
